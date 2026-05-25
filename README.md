@@ -1,12 +1,24 @@
-# Shopping-Website
+# Shopping Website
 
-Part 1: Project Architecture Setup
+A Dockerized full-stack shopping mall application with:
 
+- Frontend using Vite + Tailwind CSS
+- Backend using Node.js
+- PostgreSQL Database
+- Docker Networking
+- Nginx Reverse Proxy
+
+---
+
+# Project Architecture
+
+```bash
 shopping-mall/
 ├── backend/
 │   ├── Dockerfile
 │   ├── server.js
 │   └── package.json
+│
 └── frontend/
     ├── Dockerfile
     ├── nginx.conf
@@ -19,35 +31,100 @@ shopping-mall/
         ├── main.jsx
         ├── index.css
         └── App.jsx
+```
 
-Login to the Ec2 instance make sure to open the port 5000 and 80 in SG
+---
 
-Make 2 Directories
-1.mkdir Frontend
-2.mkdir Backend
+# Prerequisites
 
+Before starting:
+
+- Launch an EC2 Instance
+- Install Docker
+- Open the following ports in the Security Group:
+  - Port `80`
+  - Port `5000`
+
+---
+
+# Create Project Directories
+
+```bash
+mkdir Frontend
+mkdir Backend
+```
+
+---
+
+# Backend Setup
+
+```bash
 cd Backend
-touch pacakge.json server.js Dockerfile
 
+touch package.json
+touch server.js
+touch Dockerfile
+```
+
+---
+
+# Frontend Setup
+
+```bash
 cd Frontend
-touch Dockerfile nginx.conf index.html pacakge.json tailwind.config.js postcss.config.js vite.config.js 
+
+touch Dockerfile
+touch nginx.conf
+touch index.html
+touch package.json
+touch tailwind.config.js
+touch postcss.config.js
+touch vite.config.js
 
 mkdir src
+
 cd src
-touch main.jsx index.css App.jsx
 
-Now Building Image
+touch main.jsx
+touch index.css
+touch App.jsx
+```
+
+---
+
+# Build Docker Images
+
+## Build Frontend Image
+
+```bash
 cd Frontend
+
 docker build -t shop-frontend-img .
+```
 
+## Build Backend Image
+
+```bash
 cd Backend
+
 docker build --no-cache -t shop-backend-img .
+```
 
-Now Create one Dedicated Network in root dir
+---
+
+# Create Docker Network
+
+```bash
 docker network create shopping
-docker network ls
 
-Run one Dedicated psql database
+docker network ls
+```
+
+---
+
+# Run PostgreSQL Database Container
+
+```bash
 docker run -d \
   --name dedicated-sql-db \
   --network shopping \
@@ -56,8 +133,13 @@ docker run -d \
   -e POSTGRES_DB=nexus_store \
   -v postgres_data:/var/lib/postgresql/data \
   postgres:16-alpine
----------------------------------------------------
-Now Run the Container from the images
+```
+
+---
+
+# Run Backend Container
+
+```bash
 docker run -d \
   --name backend-container \
   --network shopping \
@@ -66,29 +148,86 @@ docker run -d \
   -e DB_PASSWORD=SecretPassword123 \
   -e DB_NAME=nexus_store \
   shop-backend-img
-----------------------------------------------------
-  docker run -d \
+```
+
+---
+
+# Run Frontend Container
+
+```bash
+docker run -d \
   --name frontend-shopping-service \
-  --network mall-network \
+  --network shopping \
   -p 80:80 \
   shop-frontend-img
------------------------------------------------------
-To See if container are running
+```
+
+---
+
+# Verify Running Containers
+
+```bash
 docker ps
-------------------------------------------------------
-To go inside the database
+```
+
+---
+
+# Access PostgreSQL Database
+
+```bash
 docker exec -it dedicated-sql-db psql -U shop_admin -d nexus_store
-------------------------------------------------------
-Once you are inside the DB you can execute sql cmd's
--- See all your products
+```
+
+---
+
+# Execute SQL Commands
+
+## View Products
+
+```sql
 SELECT * FROM products;
+```
 
--- See all orders placed by users
+## View Orders
+
+```sql
 SELECT * FROM orders;
+```
 
--- Type \q to exit the database shell and return to Ubuntu
+## Exit Database Shell
+
+```sql
 \q
--------------------------------------------------------
-Final Output
-<img width="1440" height="811" alt="image" src="https://github.com/user-attachments/assets/4c0f1141-4867-4816-a142-64842b123178" />
-<img width="1440" height="811" alt="image" src="https://github.com/user-attachments/assets/ab81aef6-ffda-4f74-971f-e399d49b98a5" />
+```
+
+---
+
+# Final Output
+
+## Home Page
+
+![Shopping Website Screenshot 1](https://github.com/user-attachments/assets/4c0f1141-4867-4816-a142-64842b123178)
+
+---
+
+## Products Page
+
+![Shopping Website Screenshot 2](https://github.com/user-attachments/assets/ab81aef6-ffda-4f74-971f-e399d49b98a5)
+
+---
+
+# Technologies Used
+
+- Node.js
+- PostgreSQL
+- Docker
+- Nginx
+- Vite
+- Tailwind CSS
+- React
+
+---
+
+# Author
+
+Chandan R
