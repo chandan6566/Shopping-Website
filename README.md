@@ -20,6 +20,8 @@ shopping-mall/
         ├── index.css
         └── App.jsx
 
+Login to the Ec2 instance make sure to open the port 5000 and 80 in SG
+
 Make 2 Directories
 1.mkdir Frontend
 2.mkdir Backend
