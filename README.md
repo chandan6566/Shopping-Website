@@ -20,7 +20,6 @@ shopping-mall/
         ├── index.css
         └── App.jsx
 
-
 Make 2 Directories
 1.mkdir Frontend
 2.mkdir Backend
