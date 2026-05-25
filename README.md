@@ -216,6 +216,12 @@ SELECT * FROM orders;
 
 ---
 
+## DB Page
+
+<img width="1440" height="430" alt="image" src="https://github.com/user-attachments/assets/73458ff7-93d6-4c25-9831-1f07102eb81e" />
+
+---
+
 # Technologies Used
 
 - Node.js
